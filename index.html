@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>门窗装柜计算器</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <h1>门窗装柜计算器</h1>
+      <p>录入每个木箱尺寸，检查柜门能否进入、柜内能否摆放、是否超重。</p>
+    </div>
+    <div class="top-actions">
+      <button id="sampleBtn" type="button">示例</button>
+      <button id="exportBtn" type="button">导出</button>
+      <label class="import-btn">
+        导入
+        <input id="importFile" type="file" accept="application/json">
+      </label>
+    </div>
+  </header>
+
+  <main class="workspace">
+    <section class="card">
+      <div class="card-head">
+        <h2>货柜尺寸</h2>
+        <button id="calculateBtn" class="primary" type="button">计算装柜</button>
+      </div>
+
+      <div class="form-grid">
+        <label>
+          柜型
+          <select id="containerType">
+            <option value="20GP">20GP 20尺小柜</option>
+            <option value="40GP">40GP 40尺平柜</option>
+            <option value="40HQ" selected>40HQ 40尺高柜</option>
+            <option value="custom">自定义</option>
+          </select>
+        </label>
+        <label>
+          内长 mm
+          <input id="innerLength" type="number" min="1" step="1">
+        </label>
+        <label>
+          内宽 mm
+          <input id="innerWidth" type="number" min="1" step="1">
+        </label>
+        <label>
+          内高 mm
+          <input id="innerHeight" type="number" min="1" step="1">
+        </label>
+        <label>
+          柜门宽 mm
+          <input id="doorWidth" type="number" min="1" step="1">
+        </label>
+        <label>
+          柜门高 mm
+          <input id="doorHeight" type="number" min="1" step="1">
+        </label>
+        <label>
+          最大载重 kg
+          <input id="maxWeight" type="number" min="1" step="1">
+        </label>
+        <label class="check-label">
+          允许堆叠
+          <input id="allowStacking" type="checkbox" checked>
+        </label>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-head">
+        <h2>木箱清单</h2>
+        <button id="addCrateBtn" type="button">新增木箱</button>
+      </div>
+
+      <div class="table-wrap">
+        <table class="crate-table">
+          <thead>
+            <tr>
+              <th>木箱名称</th>
+              <th>长 mm</th>
+              <th>宽 mm</th>
+              <th>高 mm</th>
+              <th>数量</th>
+              <th>单重 kg</th>
+              <th>允许旋转</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody id="crateBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="stats">
+      <div class="stat">
+        <span>结论</span>
+        <strong id="resultStatus">待计算</strong>
+      </div>
+      <div class="stat">
+        <span>已装件数</span>
+        <strong id="loadedPieces">-</strong>
+      </div>
+      <div class="stat">
+        <span>体积利用率</span>
+        <strong id="volumeUsage">-</strong>
+      </div>
+      <div class="stat">
+        <span>重量利用率</span>
+        <strong id="weightUsage">-</strong>
+      </div>
+    </section>
+
+    <section class="views">
+      <div class="card view3d-card">
+        <div class="card-head compact">
+          <h2>3D装柜图</h2>
+          <span id="view3dLabel">计算后显示，可拖动旋转</span>
+        </div>
+        <div id="view3d" class="view3d">
+          <div id="view3dHint" class="view3d-hint">点击“计算装柜”后显示 3D 图</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head compact">
+          <h2>俯视图</h2>
+          <span id="topViewLabel"></span>
+        </div>
+        <div id="topView" class="view"></div>
+      </div>
+      <div class="card">
+        <div class="card-head compact">
+          <h2>侧视图</h2>
+          <span id="sideViewLabel"></span>
+        </div>
+        <div id="sideView" class="view"></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-head compact">
+        <h2>检查结果</h2>
+        <span>柜门开口会单独校验</span>
+      </div>
+      <div id="messages" class="messages"></div>
+      <div id="detailArea" class="empty">还没有计算结果。</div>
+    </section>
+  </main>
+
+  <template id="crateTemplate">
+    <tr>
+      <td><input data-field="name" type="text" placeholder="例如：平开窗A"></td>
+      <td><input data-field="length" type="number" min="1" step="1"></td>
+      <td><input data-field="width" type="number" min="1" step="1"></td>
+      <td><input data-field="height" type="number" min="1" step="1"></td>
+      <td><input data-field="quantity" type="number" min="1" step="1" value="1"></td>
+      <td><input data-field="weight" type="number" min="0" step="0.1" value="0"></td>
+      <td class="center"><input data-field="rotatable" type="checkbox" checked></td>
+      <td><button class="remove" data-remove type="button">删除</button></td>
+    </tr>
+  </template>
+
+  <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
