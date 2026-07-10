@@ -59,6 +59,8 @@ body {
   display: block;
   width: 112px;
   height: 112px;
+  border-radius: 6px;
+  background-color: var(--dark);
   object-fit: contain;
   margin: 0 auto 2px;
 }
