@@ -7,10 +7,36 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <section id="loginScreen" class="login-screen" aria-labelledby="loginTitle">
+    <form id="loginForm" class="login-panel">
+      <span class="login-logo" role="img" aria-label="HUZHIYI"></span>
+      <div class="login-brand-name">HUZHIYI</div>
+      <div class="login-heading">
+        <h1 id="loginTitle">装柜计算系统</h1>
+        <p>请使用公司账号登录</p>
+      </div>
+      <label>
+        账号
+        <input id="loginUsername" type="text" autocomplete="username" required>
+      </label>
+      <label>
+        密码
+        <input id="loginPassword" type="password" autocomplete="current-password" required>
+      </label>
+      <p id="loginError" class="login-error" role="alert"></p>
+      <button class="primary login-submit" type="submit">登录</button>
+    </form>
+  </section>
+
+  <div id="appShell" class="app-shell" hidden>
   <header class="topbar">
-    <div>
-      <h1>门窗装柜计算器</h1>
-      <p>录入每个木箱尺寸，检查柜门能否进入、柜内能否摆放、是否超重。</p>
+    <div class="brand-area">
+      <span class="brand-logo" role="img" aria-label="HUZHIYI"></span>
+      <div>
+        <div class="brand-name">HUZHIYI</div>
+        <h1>门窗装柜计算器</h1>
+        <p>录入每个木箱尺寸，检查柜门能否进入、柜内能否摆放、是否超重。</p>
+      </div>
     </div>
     <div class="top-actions">
       <button id="sampleBtn" type="button">示例</button>
@@ -19,6 +45,7 @@
         导入
         <input id="importFile" type="file" accept="application/json">
       </label>
+      <button id="logoutBtn" type="button">退出登录</button>
     </div>
   </header>
 
@@ -149,17 +176,18 @@
       <div id="detailArea" class="empty">还没有计算结果。</div>
     </section>
   </main>
+  </div>
 
   <template id="crateTemplate">
     <tr>
-      <td><input data-field="name" type="text" placeholder="例如：平开窗A"></td>
-      <td><input data-field="length" type="number" min="1" step="1"></td>
-      <td><input data-field="width" type="number" min="1" step="1"></td>
-      <td><input data-field="height" type="number" min="1" step="1"></td>
-      <td><input data-field="quantity" type="number" min="1" step="1" value="1"></td>
-      <td><input data-field="weight" type="number" min="0" step="0.1" value="0"></td>
-      <td class="center"><input data-field="rotatable" type="checkbox" checked></td>
-      <td><button class="remove" data-remove type="button">删除</button></td>
+      <td data-label="木箱名称"><input data-field="name" type="text" placeholder="例如：平开窗A"></td>
+      <td data-label="长 mm"><input data-field="length" type="number" min="1" step="1"></td>
+      <td data-label="宽 mm"><input data-field="width" type="number" min="1" step="1"></td>
+      <td data-label="高 mm"><input data-field="height" type="number" min="1" step="1"></td>
+      <td data-label="数量"><input data-field="quantity" type="number" min="1" step="1" value="1"></td>
+      <td data-label="单重 kg"><input data-field="weight" type="number" min="0" step="0.1" value="0"></td>
+      <td class="center" data-label="允许旋转"><input data-field="rotatable" type="checkbox" checked></td>
+      <td data-label="操作"><button class="remove" data-remove type="button">删除木箱</button></td>
     </tr>
   </template>
 
