@@ -30,11 +30,39 @@ const containers = {
 
 const colors = ["#99f6e4", "#bfdbfe", "#fde68a", "#fecaca", "#ddd6fe", "#bbf7d0", "#fed7aa", "#c7d2fe", "#bae6fd"];
 const draftKey = "door-window-container-loading-v1";
+const loginSessionKey = "huzhiyi-container-login";
 
 const $ = (selector) => document.querySelector(selector);
 const crateBody = $("#crateBody");
 const crateTemplate = $("#crateTemplate");
 let threeState = null;
+
+function showApplication() {
+  $("#loginScreen").hidden = true;
+  $("#appShell").hidden = false;
+}
+
+function showLogin() {
+  $("#appShell").hidden = true;
+  $("#loginScreen").hidden = false;
+  $("#loginPassword").value = "";
+  $("#loginError").textContent = "";
+  $("#loginUsername").focus();
+}
+
+function handleLogin(event) {
+  event.preventDefault();
+  const username = $("#loginUsername").value.trim();
+  const password = $("#loginPassword").value;
+  if (username === "huzhiyi" && password === "huzhiyi123") {
+    sessionStorage.setItem(loginSessionKey, "ok");
+    showApplication();
+    return;
+  }
+  $("#loginError").textContent = "账号或密码错误，请重新输入。";
+  $("#loginPassword").value = "";
+  $("#loginPassword").focus();
+}
 
 function setContainer(type) {
   if (!containers[type]) return;
@@ -979,8 +1007,20 @@ $("#importFile").addEventListener("change", (event) => {
   event.target.value = "";
 });
 
+$("#loginForm").addEventListener("submit", handleLogin);
+$("#logoutBtn").addEventListener("click", () => {
+  sessionStorage.removeItem(loginSessionKey);
+  showLogin();
+});
+
 if (!loadDraft()) {
   setContainer("40HQ");
   addCrate({ name: "门窗木箱", quantity: 1, weight: 0, rotatable: true });
   saveDraft();
+}
+
+if (sessionStorage.getItem(loginSessionKey) === "ok") {
+  showApplication();
+} else {
+  showLogin();
 }
